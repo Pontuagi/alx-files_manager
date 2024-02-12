@@ -23,13 +23,11 @@ const UsersController = {
       const hashedPassword = crypto.createHash('sha1').update(password).digest('hex');
       const newUser = await dbClient.createUser(email, hashedPassword);
 
-      res.status(201).json({ email: newUser.email, id: newUser._id });
+      return res.status(201).json({ email: newUser.email, id: newUser._id });
     } catch (error) {
       console.error('Error creating new user:', error);
-      res.status(500).json({ error: 'Internal Server Error' });
+      return res.status(500).json({ error: 'Internal Server Error' });
     }
-
-    return undefined;
   },
 
   async getMe(req, res) {
@@ -49,7 +47,7 @@ const UsersController = {
         return res.status(401).json({ error: 'Unauthorized' });
       }
 
-      res.status(200).json({ email: user.email, id: user._id });
+      return res.status(200).json({ email: user.email, id: user._id });
     } catch (error) {
       console.error('Error retrieving user:', error);
       return res.status(500).json({ error: 'Internal Server Error' });

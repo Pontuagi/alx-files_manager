@@ -42,12 +42,12 @@ class DBClient {
   }
 
   async createUser(email, password) {
-    //try {
+    // try {
     const db = this.client.db();
     const usersCollection = db.collection('users');
     const result = await usersCollection.insertOne({ email, password });
     return { email, _id: result.insertedId };
-    //} catch (error) {
+    // } catch (error) {
     //  console.error('Error creating user:', error);
     //  throw new Error('Failed to create user');
     // }*/
