@@ -34,6 +34,24 @@ class DBClient {
     const count = await filesCollection.countDocuments();
     return count;
   }
+
+  async getUserByEmail(email) {
+    const db = this.client.db();
+    const usersCollection = db.collection('users');
+    return usersCollection.findOne({ email });
+  }
+
+  async createUser(email, password) {
+    try {
+      const db = this.client.db();
+      const usersCollection = db.collection('users');
+      const result = await usersCollection.insertOne({ email, password });
+      return { email, _id: result.insertedId };
+    } catch (error) {
+      console.error('Error creating user:', error);
+      throw new Error('Failed to create user');
+    }
+  }
 }
 
 const dbClient = new DBClient();
