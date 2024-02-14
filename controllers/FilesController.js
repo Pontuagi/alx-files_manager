@@ -62,6 +62,45 @@ const FilesController = {
       return res.status(500).json({ error: 'Internal Server Error' });
     }
   },
+
+  async getShow(req, res) {
+    const token = req.headers['x-token'];
+    if (!token) {
+      return res.status(401).json({ error: 'Unauthorized' });
+    }
+
+    const userId = await getUserIdFromToken(token);
+    if (!userId) {
+      return res.status(401).json({ error: 'Unauthorized' });
+    }
+
+    const fileId = req.params.id;
+    const file = await dbClient.getFileById(userId, fileId);
+    if (!file) {
+      return res.status(404).json({ error: 'Not found' });
+    }
+
+    return res.json(file);
+  },
+
+  async getIndex(req, res) {
+    const token = req.headers['x-token'];
+    if (!token) {
+      return res.status(401).json({ error: 'Unauthorized' });
+    }
+
+    const userId = await getUserIdFromToken(token);
+    if (!userId) {
+      return res.status(401).json({ error: 'Unauthorized' });
+    }
+
+    const parentId = req.query.parentId || 0;
+    const page = parseInt(req.query.page) || 0;
+    const pageSize = 20;
+
+    const files = await dbClient.getFilesByParentId(userId, parentId, page, pageSize);
+    return res.json(files);
+  },
 };
 
 module.exports = FilesController;
