@@ -1,6 +1,8 @@
 const sha1 = require('sha1');
 const dbClient = require('../utils/db');
 const redisClient = require('../utils/redis');
+const Bull = require('bull');
+const userQueue = new Bull('userQueue');
 
 const UsersController = {
   async postNew(req, res) {
