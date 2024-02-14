@@ -1,4 +1,4 @@
-const crypto = require('crypto');
+const sha1 = require('sha1');
 const dbClient = require('../utils/db');
 const redisClient = require('../utils/redis');
 
@@ -20,7 +20,7 @@ const UsersController = {
         return res.status(400).json({ error: 'Email already exists' });
       }
 
-      const hashedPassword = crypto.createHash('sha1').update(password).digest('hex');
+      const hashedPassword = sha1(password);
       const newUser = await dbClient.createUser(email, hashedPassword);
 
       return res.status(201).json({ email: newUser.email, id: newUser._id });
