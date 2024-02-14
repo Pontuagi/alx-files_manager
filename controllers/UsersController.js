@@ -22,7 +22,7 @@ const UsersController = {
 
       const hashedPassword = sha1(password);
       const newUser = await dbClient.createUser(email, hashedPassword);
-
+      userQueue.add({ userId: newUser._id.toString() });
       return res.status(201).json({ email: newUser.email, id: newUser._id });
     } catch (error) {
       console.error('Error creating new user:', error);
